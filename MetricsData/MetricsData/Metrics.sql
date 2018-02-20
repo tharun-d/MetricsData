@@ -92,9 +92,9 @@ delete from CatwHours
 select * from FillHoursTable
 delete from FillHoursTable
 
-create procedure GettingMissMathedEmployees as
+alter procedure GettingMissMathedEmployees as
 begin
-select ch.EmployeeName,ch.TotalCatwHours from CatwHours ch inner join FillHoursTable fh
+select ch.EmployeeName,ch.TotalCatwHours as MentionedHours,fh.TotalCatwHours as CaluclatedHours from CatwHours ch inner join FillHoursTable fh
 on ch.EmployeeName=fh.EmployeeName
 where ch.TotalCatwHours!=fh.TotalCatwHours
 end
