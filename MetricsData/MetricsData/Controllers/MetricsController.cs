@@ -51,14 +51,15 @@ namespace MetricsData.Controllers
                 {
                     _FileName = files[i].FileName;
                     _path = Path.Combine(Server.MapPath("~/UploadFiles/"), _FileName);
+                    string PersonName = GetFileName(_FileName);
                     if (ViewBag.Message == null)
                     {
                         double sumOfTotalCatw = 0;
                         FileStream stream = new FileStream(_path, FileMode.OpenOrCreate, FileAccess.Read);
 
                         var reader = ExcelReaderFactory.CreateReader(stream);
-                        #region Jan-2018
-                        if (reader.Name == "Jan-2018")
+                        #region Feb-2018
+                        if (true)//this leads to sheet Feb-2018
                         {
                             reader.Read();
                             reader.Read();
@@ -76,7 +77,7 @@ namespace MetricsData.Controllers
                                 else
                                 {
                                     SqlCommand cmd = new SqlCommand("InsertIntoEmployeeDetails @EmployeeName,@ApplicationName,@TaskDescription,@TaskClassification,@AssignedDate,@CompletedDate,@EffortHours", con);
-                                    cmd.Parameters.AddWithValue("@EmployeeName", _FileName);
+                                    cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
                                     cmd.Parameters.AddWithValue("@ApplicationName", reader.GetString(0));
                                     cmd.Parameters.AddWithValue("@TaskDescription", reader.GetString(1));
                                     cmd.Parameters.AddWithValue("@TaskClassification", reader.GetString(2));
@@ -89,12 +90,11 @@ namespace MetricsData.Controllers
                                 con.Close();
                             }
                         }
-                        FillHoursTable(_FileName, sumOfTotalCatw);
+                        FillHoursTable(PersonName, sumOfTotalCatw);
                         #endregion
 
                         reader.NextResult();
                         reader.NextResult();
-
 
                         #region Vacation Dates
                         if (reader.Name == "Vacation Dates")
@@ -122,7 +122,7 @@ namespace MetricsData.Controllers
                                 else
                                 {
                                     SqlCommand cmd = new SqlCommand("insertintovacationDates @EmployeeName,@StartDate,@EndDate,@NumberOfDates,@Weekend", con);
-                                    cmd.Parameters.AddWithValue("@EmployeeName", _FileName);
+                                    cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
                                     cmd.Parameters.AddWithValue("@StartDate", reader.GetDateTime(1));
                                     cmd.Parameters.AddWithValue("@EndDate", reader.GetDateTime(2));
                                     string totalNumberofWeekend = Weekend(((reader.GetDateTime(1)).Day), ((reader.GetDateTime(2)).Day));
@@ -148,14 +148,19 @@ namespace MetricsData.Controllers
                             {
 
                                 con.Open();
+                              
                                 if (reader.GetString(0) == null || reader.GetString(0) == "")
                                 {
+                                    SqlCommand cmd = new SqlCommand("insertintoCatwHours @EmployeeName,@TotalCatwHours", con);
+                                    cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
+                                    cmd.Parameters.AddWithValue("@TotalCatwHours", 0);
+                                    j = cmd.ExecuteNonQuery();
                                     break;
                                 }
                                 else
                                 {
                                     SqlCommand cmd = new SqlCommand("insertintoCatwHours @EmployeeName,@TotalCatwHours", con);
-                                    cmd.Parameters.AddWithValue("@EmployeeName", _FileName);
+                                    cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
                                     cmd.Parameters.AddWithValue("@TotalCatwHours", reader.GetDouble(1));
                                     j = cmd.ExecuteNonQuery();
                                 }
@@ -230,7 +235,7 @@ namespace MetricsData.Controllers
             {
                 if (Dates.Contains(item))
                 {
-                    totalNumberofWeekend = totalNumberofWeekend + " " + item + " ";
+                    totalNumberofWeekend = totalNumberofWeekend  + item + " ";
                 }
             }
             if (totalNumberofWeekend != null)
@@ -267,6 +272,34 @@ namespace MetricsData.Controllers
                 }
             }
             return totalNumberofWeekend;
+        }
+        public string GetFileName(string FileName)
+        {
+            string Name = null;
+            int position=0;
+            bool found = false;
+            for (int i = 0; i < FileName.Length; i++)
+            {
+                if (Convert.ToChar(FileName[i])=='-')
+                {
+                    position = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
+                Name = FileName.Remove(position);
+            }
+            if (Name!=null)
+            {
+                return Name;
+            }
+            else
+            {
+                return "Name cant be Caluclated";
+            }
+           
         }
     }
 }
