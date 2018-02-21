@@ -51,59 +51,59 @@ begin
 insert into vacationDates values(@EmployeeName,@StartDate,@EndDate,@NumberOfDates,@Weekend)
 end
 
-create table CatwHours
-(
-EmployeeName varchar(max),
-TotalCatwHours int
-)
-
-create procedure insertintoCatwHours
-(
-@EmployeeName varchar(max),
-@TotalCatwHours int
-)
-as
-begin
-insert into CatwHours values(@EmployeeName,@TotalCatwHours)
-end
 
 create table FillHoursTable
 (
 EmployeeName varchar(max),
-TotalCatwHours int
+MetricsHours int,
+CatwHours int
 )
+
 
 create procedure insertintoFillHoursTable
 (
 @EmployeeName varchar(max),
-@TotalCatwHours int
+@MetricsHours int,
+@CatwHours int
 )
 as
 begin
-insert into FillHoursTable values(@EmployeeName,@TotalCatwHours)
+insert into FillHoursTable values(@EmployeeName,@MetricsHours,@CatwHours)
+end
+
+create procedure UpdateFillHoursTable(@EmployeeName varchar(max),@CatwHours int)as
+begin
+update FillHoursTable set CatwHours=@CatwHours where EmployeeName=@EmployeeName
 end
 
 select * from EmployeeDetails
 delete from EmployeeDetails
 select * from vacationDates
 delete from vacationDates
-select * from CatwHours
-delete from CatwHours
 select * from FillHoursTable
 delete from FillHoursTable
 
-alter procedure GettingMissMathedEmployees as
+create procedure GettingMissMathedEmployees as
 begin
-select ch.EmployeeName,ch.TotalCatwHours as MentionedHours,fh.TotalCatwHours as CaluclatedHours from CatwHours ch inner join FillHoursTable fh
-on ch.EmployeeName=fh.EmployeeName
-where ch.TotalCatwHours!=fh.TotalCatwHours
+select * from FillHoursTable fh
+where fh.MetricsHours!=fh.CatwHours
 end
 
 
-create procedure DeleteMetrics as
+alter procedure DeleteMetrics as
 begin
 delete from EmployeeDetails
 delete from vacationDates
-delete from CatwHours
 delete from FillHoursTable
+end
+
+alter procedure statussheet as begin
+select distinct ed.EmployeeName,ApplicationName,CatwHours from EmployeeDetails ed,FillHoursTable ft
+where ed.EmployeeName=ft.EmployeeName
+end
+
+create procedure teamleavedetails as begin
+select distinct ed.ApplicationName,vd.EmployeeName,vd.StartDate,vd.EndDate,vd.NumberOfDates,vd.Weekend
+from vacationDates vd,EmployeeDetails ed
+where vd.EmployeeName=ed.EmployeeName
 end

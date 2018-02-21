@@ -151,17 +151,17 @@ namespace MetricsData.Controllers
                               
                                 if (reader.GetString(0) == null || reader.GetString(0) == "")
                                 {
-                                    SqlCommand cmd = new SqlCommand("insertintoCatwHours @EmployeeName,@TotalCatwHours", con);
-                                    cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
-                                    cmd.Parameters.AddWithValue("@TotalCatwHours", 0);
-                                    j = cmd.ExecuteNonQuery();
+                                    //SqlCommand cmd = new SqlCommand("insertintoCatwHours @EmployeeName,@TotalCatwHours", con);
+                                    //cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
+                                    //cmd.Parameters.AddWithValue("@TotalCatwHours", 0);
+                                    //j = cmd.ExecuteNonQuery();
                                     break;
                                 }
                                 else
                                 {
-                                    SqlCommand cmd = new SqlCommand("insertintoCatwHours @EmployeeName,@TotalCatwHours", con);
+                                    SqlCommand cmd = new SqlCommand("UpdateFillHoursTable @EmployeeName,@CatwHours", con);
                                     cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
-                                    cmd.Parameters.AddWithValue("@TotalCatwHours", reader.GetDouble(1));
+                                    cmd.Parameters.AddWithValue("@CatwHours", reader.GetDouble(1));
                                     j = cmd.ExecuteNonQuery();
                                 }
                                 con.Close();
@@ -180,9 +180,10 @@ namespace MetricsData.Controllers
             int i;
             SqlConnection con = new SqlConnection("Server=HIB30BWAX2; Initial Catalog = metrics; User ID = sa; Password = Passw0rd@12;");
             con.Open();
-            SqlCommand cmd = new SqlCommand("insertintoFillHoursTable @EmployeeName,@TotalCatwHours", con);
+            SqlCommand cmd = new SqlCommand("insertintoFillHoursTable @EmployeeName,@MetricsHours,@CatwHours", con);
             cmd.Parameters.AddWithValue("@EmployeeName", fileName);
-            cmd.Parameters.AddWithValue("@TotalCatwHours", sumOfTotalCatw);
+            cmd.Parameters.AddWithValue("@MetricsHours", sumOfTotalCatw);
+            cmd.Parameters.AddWithValue("@CatwHours",0);
             i = cmd.ExecuteNonQuery();
             con.Close();
         }
