@@ -102,8 +102,8 @@ select distinct ed.EmployeeName,ApplicationName,CatwHours from EmployeeDetails e
 where ed.EmployeeName=ft.EmployeeName
 end
 
-create procedure teamleavedetails as begin
-select distinct ed.ApplicationName,vd.EmployeeName,vd.StartDate,vd.EndDate,vd.NumberOfDates,vd.Weekend
+alter procedure teamleavedetails as begin
+select distinct ed.ApplicationName,vd.EmployeeName,cast(vd.StartDate as date),cast(vd.EndDate as date),vd.NumberOfDates,vd.Weekend
 from vacationDates vd,EmployeeDetails ed
 where vd.EmployeeName=ed.EmployeeName
 end

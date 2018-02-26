@@ -251,7 +251,7 @@ namespace MetricsData.Controllers
         }
         public int TotalHolidays(int startDate, int EndDate)
         {
-            int[] Dates = new int[] { 5, 6, 12, 13, 19, 20, 26, 27 };
+            int[] Dates = new int[] { 3, 4, 10, 11, 17, 18, 24, 25 };
             int sd = startDate;
             int tsd = startDate;
             int ed = EndDate;
