@@ -64,14 +64,19 @@ namespace MetricsData.Controllers
                             reader.Read();
                             reader.Read();
                             reader.Read();
+                            int loopstarted = 0;
                             // SqlConnection Connection = new SqlConnection("Server=WIN-P2S8E7IH0S7\\SQLEXPRESS;Integrated Security=sspi;database=FileAnalysis");
                             SqlConnection con = new SqlConnection("Server=HIB30BWAX2; Initial Catalog = metrics; User ID = sa; Password = Passw0rd@12;");
                             while (reader.Read())
                             {
-
+                                loopstarted++;
                                 con.Open();
                                 if (reader.GetString(0) == null || reader.GetString(0) == "")
                                 {
+                                    //if (loopstarted==1)
+                                    //{
+                                    //    NoMetrics(PersonName);
+                                    //}
                                     break;
                                 }
                                 else
@@ -301,6 +306,16 @@ namespace MetricsData.Controllers
                 return "Name cant be Caluclated";
             }
            
+        }
+        public void NoMetrics(string EmployeeName)
+        {
+            int i;
+            SqlConnection con = new SqlConnection("Server=HIB30BWAX2; Initial Catalog = metrics; User ID = sa; Password = Passw0rd@12;");
+            con.Open();
+            SqlCommand cmd = new SqlCommand("insertintoFillHoursTableNoMetrics @EmployeeName", con);
+            cmd.Parameters.AddWithValue("@EmployeeName", EmployeeName);
+            i=cmd.ExecuteNonQuery();
+            con.Close();
         }
     }
 }

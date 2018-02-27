@@ -71,11 +71,21 @@ begin
 insert into FillHoursTable values(@EmployeeName,@MetricsHours,@CatwHours)
 end
 
+create procedure insertintoFillHoursTableNoMetrics
+(
+@EmployeeName varchar(max)
+)
+as
+begin
+insert into FillHoursTable values(@EmployeeName,0,0)
+end
+
 create procedure UpdateFillHoursTable(@EmployeeName varchar(max),@CatwHours int)as
 begin
 update FillHoursTable set CatwHours=@CatwHours where EmployeeName=@EmployeeName
 end
 
+select distinct EmployeeName from EmployeeDetails
 select * from EmployeeDetails
 delete from EmployeeDetails
 select * from vacationDates
@@ -103,7 +113,7 @@ where ed.EmployeeName=ft.EmployeeName
 end
 
 alter procedure teamleavedetails as begin
-select distinct ed.ApplicationName,vd.EmployeeName,cast(vd.StartDate as date),cast(vd.EndDate as date),vd.NumberOfDates,vd.Weekend
+select distinct ed.ApplicationName,vd.EmployeeName,cast(vd.StartDate as date) as StartDate,cast(vd.EndDate as date) as EndDate,vd.NumberOfDates,vd.Weekend
 from vacationDates vd,EmployeeDetails ed
 where vd.EmployeeName=ed.EmployeeName
 end
