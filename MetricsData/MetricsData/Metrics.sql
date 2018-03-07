@@ -9,11 +9,14 @@ TaskDescription varchar(max),
 TaskClassification varchar(max),
 AssignedDate varchar(max),
 CompletedDate varchar(max),
-EffortHours int
+EffortHours int,
+StatusOfTask varchar(max),
+AssignedTo varchar(max),
+Validationf varchar(max)
 )
 
 
-Create procedure InsertIntoEmployeeDetails
+alter procedure InsertIntoEmployeeDetails
 (
 @EmployeeName varchar(max),
 @ApplicationName varchar(max),
@@ -21,11 +24,14 @@ Create procedure InsertIntoEmployeeDetails
 @TaskClassification varchar(max),
 @AssignedDate varchar(max),
 @CompletedDate varchar(max),
-@EffortHours int
+@EffortHours int,
+@StatusOfTask varchar(max),
+@AssignedTo varchar(max),
+@Validationf varchar(max)
 )
 as
 begin
-insert into EmployeeDetails values(@EmployeeName,@ApplicationName,@TaskDescription,@TaskClassification,@AssignedDate,@CompletedDate,@EffortHours)
+insert into EmployeeDetails values(@EmployeeName,@ApplicationName,@TaskDescription,@TaskClassification,@AssignedDate,@CompletedDate,@EffortHours,@StatusOfTask,@AssignedTo,@Validationf)
 end
 
 create table vacationDates
@@ -86,7 +92,7 @@ update FillHoursTable set CatwHours=@CatwHours where EmployeeName=@EmployeeName
 end
 
 select distinct EmployeeName from EmployeeDetails
-select * from EmployeeDetails
+select distinct(EmployeeName) from EmployeeDetails where validationf!='valid'
 delete from EmployeeDetails
 select * from vacationDates
 delete from vacationDates

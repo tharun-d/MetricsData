@@ -81,7 +81,7 @@ namespace MetricsData.Controllers
                                 }
                                 else
                                 {
-                                    SqlCommand cmd = new SqlCommand("InsertIntoEmployeeDetails @EmployeeName,@ApplicationName,@TaskDescription,@TaskClassification,@AssignedDate,@CompletedDate,@EffortHours", con);
+                                    SqlCommand cmd = new SqlCommand("InsertIntoEmployeeDetails @EmployeeName,@ApplicationName,@TaskDescription,@TaskClassification,@AssignedDate,@CompletedDate,@EffortHours,@StatusOfTask,@AssignedTo,@Validationf", con);
                                     cmd.Parameters.AddWithValue("@EmployeeName", PersonName);
                                     cmd.Parameters.AddWithValue("@ApplicationName", reader.GetString(0));
                                     cmd.Parameters.AddWithValue("@TaskDescription", reader.GetString(1));
@@ -89,6 +89,10 @@ namespace MetricsData.Controllers
                                     cmd.Parameters.AddWithValue("@AssignedDate", reader.GetDateTime(3));
                                     cmd.Parameters.AddWithValue("@CompletedDate", reader.GetDateTime(4));
                                     cmd.Parameters.AddWithValue("@EffortHours", reader.GetDouble(5));
+                                    cmd.Parameters.AddWithValue("@StatusOfTask","Closed");
+                                    cmd.Parameters.AddWithValue("@AssignedTo", PersonName);
+                                    cmd.Parameters.AddWithValue("@Validationf", reader.GetString(8));
+
                                     sumOfTotalCatw = sumOfTotalCatw + reader.GetDouble(5);
                                     j = cmd.ExecuteNonQuery();
                                 }
