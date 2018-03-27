@@ -92,7 +92,7 @@ update FillHoursTable set CatwHours=@CatwHours where EmployeeName=@EmployeeName
 end
 
 select distinct EmployeeName from EmployeeDetails
-select distinct(EmployeeName) from EmployeeDetails where validationf!='valid'
+select * from EmployeeDetails where validationf!='valid'
 delete from EmployeeDetails
 select * from vacationDates
 delete from vacationDates

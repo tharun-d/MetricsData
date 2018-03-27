@@ -227,7 +227,7 @@ namespace MetricsData.Controllers
         }
         public string Weekend(int startDate, int EndDate)
         {
-            int[] Dates = new int[] { 3, 4, 10, 11, 17, 18, 24, 25 };
+            int[] Dates = new int[] { 3, 4, 10, 11, 17, 18, 24, 25,31 };
             int sd = startDate;
             int tsd = startDate;
             int ed = EndDate;
@@ -260,7 +260,7 @@ namespace MetricsData.Controllers
         }
         public int TotalHolidays(int startDate, int EndDate)
         {
-            int[] Dates = new int[] { 3, 4, 10, 11, 17, 18, 24, 25 };
+            int[] Dates = new int[] { 3, 4, 10, 11, 17, 18, 24, 25 ,31};
             int sd = startDate;
             int tsd = startDate;
             int ed = EndDate;
